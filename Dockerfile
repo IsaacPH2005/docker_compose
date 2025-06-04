@@ -10,8 +10,10 @@ FROM php:8.2.0-apache
 # Establece la variable de entorno DEBIAN_FRONTEND en 'noninteractive' para evitar que las instalaciones de paquetes requieran interacción manual durante la construcción de la imagen.
 ARG DEBIAN_FRONTEND=noninteractive 
 RUN docker-php-ext-install mysqli 
-RUN opt update \
-    && opt install libzip-dev zlib1g-dev -y \
+# Se corrigió 'opt' a 'apt-get' y se añadió '-y'
+RUN apt-get update && apt-get install -y libzip-dev zlib1g-dev \
     && rm -rf /var/lib/apt/lists/* \
-    && docker-php-ext-install zip 
+    && docker-php-ext-install zip
+
+# Esta línea está correcta para habilitar el módulo rewrite de Apache
 RUN a2enmod rewrite
